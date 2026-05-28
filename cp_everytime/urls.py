@@ -1,3 +1,5 @@
+like
+
 good
 from django.urls import path
 from . import views
@@ -21,14 +23,20 @@ urlpatterns = [
     path('mypage/', views.mypage_view, name='mypage'),
 
 # cp_everytime/urls.py
+main
 from django.urls import path
 from . import views
 
 app_name = 'cp_everytime'
 
 urlpatterns = [
+like
+    path('<int:post_id>/comment/', views.comment_create, name='comment_create'),
+    path('<int:post_id>/comment/<int:comment_id>/delete/', views.comment_delete, name='comment_delete'),
+    path('<int:post_id>/like/', views.like_toggle, name='like_toggle'),
     path('signup/', views.signup_view, name='signup'),    # /accounts/signup/
     path('login/', views.login_view, name='login'),      # /accounts/login/
     path('mypage/', views.profile_view, name='profile'),    # /accounts/mypage/
+main
 main
 ]
