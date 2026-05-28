@@ -20,7 +20,7 @@
     <button type="submit" class="btn btn-outline">검색</button>
   </form>
 
-  <ul class="post-list">
+  <ul class="cp_everytime/post-list">
     {% for post in posts %}
       <li>
         <a href="{% url 'post_detail' post.id %}" class="post-item">
