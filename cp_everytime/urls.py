@@ -1,8 +1,7 @@
-like
-
-good
 from django.urls import path
 from . import views
+
+app_name = 'cp_everytime'
 
 urlpatterns = [
     # 게시판 메인
@@ -19,24 +18,13 @@ urlpatterns = [
     
     # 글 수정
     path('post/edit/<int:id>/', views.post_update, name='post_update'),
-
     path('mypage/', views.mypage_view, name='mypage'),
-
-# cp_everytime/urls.py
-main
-from django.urls import path
-from . import views
-
-app_name = 'cp_everytime'
-
-urlpatterns = [
-like
     path('<int:post_id>/comment/', views.comment_create, name='comment_create'),
     path('<int:post_id>/comment/<int:comment_id>/delete/', views.comment_delete, name='comment_delete'),
     path('<int:post_id>/like/', views.like_toggle, name='like_toggle'),
-    path('signup/', views.signup_view, name='signup'),    # /accounts/signup/
-    path('login/', views.login_view, name='login'),      # /accounts/login/
-    path('mypage/', views.profile_view, name='profile'),    # /accounts/mypage/
-main
-main
+    path('signup/', views.signup_view, name='signup'),  # /accounts/signup/
+    path('login/', views.login_view, name='login'),  # /accounts/login/
+    path('mypage/', views.mypage_view, name='profile'),  # /accounts/mypage/
+    path('logout/', views.logout_view, name='logout'),
+    path('post/delete/<int:id>/', views.post_delete, name='post_delete'),
 ]

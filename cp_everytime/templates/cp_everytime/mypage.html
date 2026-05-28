@@ -10,7 +10,7 @@
       <p class="profile-sub">@{{ user.username }}</p>
       <p class="profile-sub">{{ user.email }}</p>
     </div>
-    <a href="{% url 'profile_edit' %}" class="btn btn-outline">프로필 수정</a>
+    <a href="{% url 'cp_everytime:profile' %}" class="btn btn-outline">프로필 수정</a>
   </div>
 
   <div class="tab-bar">
@@ -23,7 +23,7 @@
     <ul class="post-list">
       {% for post in my_posts %}
         <li>
-          <a href="{% url 'post_detail' post.id %}" class="post-item">
+          <a href="{% url 'cp_everytime:post_detail' post.id %}" class="post-item">
             <div class="post-item-left">
               <span class="tag">{{ post.board.name }}</span>
               <span class="post-title">{{ post.title }}</span>
@@ -45,7 +45,7 @@
     <ul class="post-list">
       {% for comment in my_comments %}
         <li>
-          <a href="{% url 'post_detail' comment.post.id %}#comment-{{ comment.id }}" class="post-item">
+          <a href="{% url 'cp_everytime:post_detail' comment.post.id %}#comment-{{ comment.id }}" class="post-item">
             <div class="post-item-left">
               <span class="tag">{{ comment.post.board.name }}</span>
               <span class="post-title">{{ comment.content|truncatechars:60 }}</span>
@@ -63,7 +63,7 @@
     <ul class="post-list">
       {% for post in liked_posts %}
         <li>
-          <a href="{% url 'post_detail' post.id %}" class="post-item">
+          <a href="{% url 'cp_everytime:post_detail' post.id %}" class="post-item">
             <div class="post-item-left">
               <span class="tag">{{ post.board.name }}</span>
               <span class="post-title">{{ post.title }}</span>

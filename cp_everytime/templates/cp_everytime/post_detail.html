@@ -4,7 +4,7 @@
 {% block content %}
 <div class="narrow">
 
-  <a href="{% url 'post_list' post.board.id %}" class="back-link">← {{ post.board.name }}</a>
+  <a href="{% url 'cp_everytime:post_list' post.board.id %}" class="back-link">← {{ post.board.name }}</a>
 
   <article class="post-card">
     <h2 class="post-detail-title">{{ post.title }}</h2>
@@ -19,7 +19,7 @@
 
     <div class="post-actions">
       {% if user.is_authenticated %}
-        <form method="POST" action="{% url 'post_like' post.id %}">
+        <form method="POST" action="{% url 'cp_everytime:like_toggle' post.id %}">
           {% csrf_token %}
           <button type="submit" class="btn {% if user_liked %}btn-primary{% else %}btn-outline{% endif %}">
             ❤ 좋아요 {{ post.like_count }}
@@ -31,8 +31,8 @@
 
       {% if user == post.author %}
         <div class="owner-actions">
-          <a href="{% url 'post_update' post.id %}" class="btn btn-outline">수정</a>
-          <form method="POST" action="{% url 'post_delete' post.id %}"
+          <a href="{% url 'cp_everytime:post_update' post.id %}" class="btn btn-outline">수정</a>
+          <form method="POST" action="{% url 'cp_everytime:post_delete' post.id %}"
                 onsubmit="return confirm('정말 삭제하시겠습니까?')">
             {% csrf_token %}
             <button type="submit" class="btn btn-danger-outline">삭제</button>
@@ -54,7 +54,7 @@
           <div class="comment-header-right">
             <span class="comment-date">{{ comment.created_at|date:"m.d H:i" }}</span>
             {% if user == comment.author %}
-              <form method="POST" action="{% url 'comment_delete' comment.id %}">
+              <form method="POST" action="{% url 'cp_everytime:comment_delete' post.id comment.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn-link-danger">삭제</button>
               </form>
@@ -72,7 +72,7 @@
               <div class="comment-header-right">
                 <span class="comment-date">{{ reply.created_at|date:"m.d H:i" }}</span>
                 {% if user == reply.author %}
-                  <form method="POST" action="{% url 'comment_delete' reply.id %}">
+                  <form method="POST" action="{% url 'cp_everytime:comment_delete' reply.id %}">
                     {% csrf_token %}
                     <button type="submit" class="btn-link-danger">삭제</button>
                   </form>
@@ -84,7 +84,7 @@
         {% endfor %}
 
         {% if user.is_authenticated %}
-          <form method="POST" action="{% url 'comment_create' post.id %}" class="reply-form">
+          <form method="POST" action="{% url 'cp_everytime:comment_create' post.id %}" class="reply-form">
             {% csrf_token %}
             <input type="hidden" name="parent_id" value="{{ comment.id }}" />
             <input type="text" name="content" class="form-input" placeholder="대댓글 입력..." required />
@@ -101,7 +101,7 @@
 
     {% if user.is_authenticated %}
       <div class="comment-form-wrap">
-        <form method="POST" action="{% url 'comment_create' post.id %}">
+        <form method="POST" action="{% url 'cp_everytime:comment_create' post.id %}">
           {% csrf_token %}
           <input type="hidden" name="parent_id" value="" />
           <textarea name="content" class="form-input comment-textarea"
@@ -116,7 +116,7 @@
       </div>
     {% else %}
       <p class="login-prompt">
-        <a href="{% url 'login' %}">로그인</a> 후 댓글을 작성할 수 있습니다.
+        <a href="{% url 'cp_everytime:login' %}">로그인</a> 후 댓글을 작성할 수 있습니다.
       </p>
     {% endif %}
   </section>

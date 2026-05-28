@@ -10,7 +10,7 @@
 
   <div class="form-card">
     <form method="POST"
-      action="{% if post %}{% url 'post_update' post.id %}{% else %}{% url 'post_create' board.id %}{% endif %}">
+      action="{% if post %}{% url 'cp_everytime:post_update' post.id %}{% else %}{% url 'cp_everytime:post_create' board.id %}{% endif %}">
       {% csrf_token %}
 
       <div class="form-group">
@@ -48,7 +48,7 @@
       {% endif %}
 
       <div class="form-actions">
-        <a href="{% if post %}{% url 'post_detail' post.id %}{% else %}{% url 'post_list' board.id %}{% endif %}"
+        <a href="{% if post %}{% url 'cp_everytime:post_detail' post.id %}{% else %}{% url 'cp_everytime:post_list' board.id %}{% endif %}"
            class="btn btn-outline">취소</a>
         <button type="submit" class="btn btn-primary">
           {% if post %}수정 완료{% else %}등록하기{% endif %}

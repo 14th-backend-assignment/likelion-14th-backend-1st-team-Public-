@@ -6,7 +6,7 @@
   <h2 class="section-title">전체 게시판</h2>
   <div class="board-grid">
     {% for board in boards %}
-      <a href="{% url 'post_list' board.id %}" class="board-card">
+      <a href="{% url 'cp_everytime:post_list' board.id %}" class="board-card">
         <span class="board-icon">📋</span>
         <span class="board-name">{{ board.name }}</span>
         <span class="board-count">{{ board.post_count }}개</span>
@@ -20,7 +20,7 @@
   <ul class="post-list">
     {% for post in popular_posts %}
       <li>
-        <a href="{% url 'post_detail' post.id %}" class="post-item">
+        <a href="{% url 'cp_everytime:post_detail' post.id %}" class="post-item">
           <div class="post-item-left">
             <span class="tag">{{ post.board.name }}</span>
             <span class="post-title">{{ post.title }}</span>

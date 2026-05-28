@@ -7,7 +7,7 @@
     <h1 class="auth-logo">에브리타임</h1>
     <p class="auth-sub">대학생 커뮤니티</p>
 
-    <form method="POST" action="{% url 'login' %}">
+    <form method="POST" action="{% url 'cp_everytime:login' %}">
       {% csrf_token %}
 
       <div class="form-group">
@@ -38,7 +38,7 @@
       <button type="submit" class="btn btn-primary btn-block">로그인</button>
     </form>
 
-    <p class="auth-footer">계정이 없으신가요? <a href="{% url 'signup' %}">회원가입</a></p>
+    <p class="auth-footer">계정이 없으신가요? <a href="{% url 'cp_everytime:signup' %}">회원가입</a></p>
   </div>
 </div>
 {% endblock %}
