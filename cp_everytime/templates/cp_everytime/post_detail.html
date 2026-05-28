@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.title }} - 에브리타임{% endblock %}
+
+{% block content %}
+<div class="narrow">
+
+  <a href="{% url 'post_list' post.board.id %}" class="back-link">← {{ post.board.name }}</a>
+
+  <article class="post-card">
+    <h2 class="post-detail-title">{{ post.title }}</h2>
+    <div class="post-meta">
+      <span>{% if post.is_anonymous %}익명{% else %}{{ post.author.nickname }}{% endif %}</span>
+      <span>{{ post.created_at|date:"Y.m.d H:i" }}</span>
+      <span>조회 {{ post.view_count }}</span>
+    </div>
+    <hr class="divider">
+    <div class="post-body">{{ post.content|linebreaks }}</div>
+    <hr class="divider">
+
+    <div class="post-actions">
+      {% if user.is_authenticated %}
+        <form method="POST" action="{% url 'post_like' post.id %}">
+          {% csrf_token %}
+          <button type="submit" class="btn {% if user_liked %}btn-primary{% else %}btn-outline{% endif %}">
+            ❤ 좋아요 {{ post.like_count }}
+          </button>
+        </form>
+      {% else %}
+        <span class="like-static">❤ {{ post.like_count }}</span>
+      {% endif %}
+
+      {% if user == post.author %}
+        <div class="owner-actions">
+          <a href="{% url 'post_update' post.id %}" class="btn btn-outline">수정</a>
+          <form method="POST" action="{% url 'post_delete' post.id %}"
+                onsubmit="return confirm('정말 삭제하시겠습니까?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger-outline">삭제</button>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  </article>
+
+  <section class="comment-section">
+    <h3 class="comment-title">댓글 {{ comments.count }}개</h3>
+
+    {% for comment in comments %}
+      <div class="comment-card" id="comment-{{ comment.id }}">
+        <div class="comment-header">
+          <span class="comment-author">
+            {% if comment.is_anonymous %}익명{% else %}{{ comment.author.nickname }}{% endif %}
+          </span>
+          <div class="comment-header-right">
+            <span class="comment-date">{{ comment.created_at|date:"m.d H:i" }}</span>
+            {% if user == comment.author %}
+              <form method="POST" action="{% url 'comment_delete' comment.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-link-danger">삭제</button>
+              </form>
+            {% endif %}
+          </div>
+        </div>
+        <p class="comment-body">{{ comment.content }}</p>
+
+        {% for reply in comment.replies.all %}
+          <div class="reply-card">
+            <div class="comment-header">
+              <span class="comment-author">
+                ↩ {% if reply.is_anonymous %}익명{% else %}{{ reply.author.nickname }}{% endif %}
+              </span>
+              <div class="comment-header-right">
+                <span class="comment-date">{{ reply.created_at|date:"m.d H:i" }}</span>
+                {% if user == reply.author %}
+                  <form method="POST" action="{% url 'comment_delete' reply.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn-link-danger">삭제</button>
+                  </form>
+                {% endif %}
+              </div>
+            </div>
+            <p class="comment-body">{{ reply.content }}</p>
+          </div>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+          <form method="POST" action="{% url 'comment_create' post.id %}" class="reply-form">
+            {% csrf_token %}
+            <input type="hidden" name="parent_id" value="{{ comment.id }}" />
+            <input type="text" name="content" class="form-input" placeholder="대댓글 입력..." required />
+            <label class="check-label">
+              <input type="checkbox" name="is_anonymous"> 익명
+            </label>
+            <button type="submit" class="btn btn-outline">등록</button>
+          </form>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p class="empty">첫 댓글을 남겨보세요!</p>
+    {% endfor %}
+
+    {% if user.is_authenticated %}
+      <div class="comment-form-wrap">
+        <form method="POST" action="{% url 'comment_create' post.id %}">
+          {% csrf_token %}
+          <input type="hidden" name="parent_id" value="" />
+          <textarea name="content" class="form-input comment-textarea"
+            placeholder="댓글을 입력하세요..." required></textarea>
+          <div class="comment-form-footer">
+            <label class="check-label">
+              <input type="checkbox" name="is_anonymous"> 익명으로 작성
+            </label>
+            <button type="submit" class="btn btn-primary">댓글 등록</button>
+          </div>
+        </form>
+      </div>
+    {% else %}
+      <p class="login-prompt">
+        <a href="{% url 'login' %}">로그인</a> 후 댓글을 작성할 수 있습니다.
+      </p>
+    {% endif %}
+  </section>
+
+</div>
+{% endblock %}

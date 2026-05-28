@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}{% if post %}글 수정{% else %}글 작성{% endif %} - 에브리타임{% endblock %}
+
+{% block content %}
+<div class="narrow">
+  <div class="page-header">
+    <h2 class="page-title">{% if post %}글 수정{% else %}새 글 작성{% endif %}</h2>
+    <span class="tag">{{ board.name }}</span>
+  </div>
+
+  <div class="form-card">
+    <form method="POST"
+      action="{% if post %}{% url 'post_update' post.id %}{% else %}{% url 'post_create' board.id %}{% endif %}">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title"
+          class="form-input {% if form.title.errors %}is-invalid{% endif %}"
+          placeholder="제목을 입력하세요" maxlength="100"
+          value="{{ form.title.value|default:'' }}" required />
+        {% if form.title.errors %}
+          <span class="field-error">{{ form.title.errors.0 }}</span>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="content">내용</label>
+        <textarea id="content" name="content"
+          class="form-input form-textarea {% if form.content.errors %}is-invalid{% endif %}"
+          placeholder="내용을 입력하세요" required
+        >{{ form.content.value|default:'' }}</textarea>
+        {% if form.content.errors %}
+          <span class="field-error">{{ form.content.errors.0 }}</span>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label class="check-label">
+          <input type="checkbox" name="is_anonymous"
+            {% if form.is_anonymous.value %}checked{% endif %}>
+          익명으로 작성
+        </label>
+      </div>
+
+      {% if form.non_field_errors %}
+        <div class="form-error">{{ form.non_field_errors.0 }}</div>
+      {% endif %}
+
+      <div class="form-actions">
+        <a href="{% if post %}{% url 'post_detail' post.id %}{% else %}{% url 'post_list' board.id %}{% endif %}"
+           class="btn btn-outline">취소</a>
+        <button type="submit" class="btn btn-primary">
+          {% if post %}수정 완료{% else %}등록하기{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

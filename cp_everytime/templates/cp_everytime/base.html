@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}에브리타임{% endblock %}</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="{% url 'board_list' %}" class="navbar-logo">에브리타임</a>
+      <ul class="navbar-menu">
+        <li><a href="{% url 'board_list' %}">게시판</a></li>
+        {% if user.is_authenticated %}
+          <li><a href="{% url 'mypage' %}">마이페이지</a></li>
+          <li><a href="{% url 'logout' %}">로그아웃</a></li>
+        {% else %}
+          <li><a href="{% url 'login' %}">로그인</a></li>
+          <li><a href="{% url 'signup' %}" class="btn-nav">회원가입</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  {% if messages %}
+    <div class="message-wrap">
+      {% for message in messages %}
+        <div class="message message--{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main class="container">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2024 에브리타임 클론 프로젝트</p>
+  </footer>
+
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
